@@ -1,0 +1,84 @@
+package cw;
+import java.util.*;
+class TreeNd{
+	char value;
+	TreeNd lval,rval;
+	
+	TreeNd(char item){
+		value=item;
+		lval=rval=null;
+	}
+	
+}
+public class TreeArith {
+	//check if item is an operator
+	public static boolean checkop(char c)
+	{
+		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+            return true;
+        }
+        return false;
+	}
+	//traverse tree inorder
+	static void inorder(TreeNd t)
+	 {
+		 if(t!=null)
+		 {
+			 inorder(t.lval);
+			 System.out.print(t.value+" ");
+			 inorder(t.rval);
+		 }
+	 }
+	// construct the tree using postfix expressiom
+	static TreeNd constructTree(char postfix[])
+	{
+		 // Create stack to keep track of the nodes while constructing the tree
+		Stack<TreeNd> st = new Stack<TreeNd>();
+		TreeNd t, t1, t2;
+		 // Iterate through the characters of the postfix expression
+        for (int i = 0; i < postfix.length; i++) {
+        // If the char is not an operator, create a new node and push it onto the stack    
+            if (!checkop(postfix[i])) {
+                t = new TreeNd(postfix[i]);
+                st.push(t);
+            } else {
+            	t=new TreeNd(postfix[i]);
+            	// Pop two nodes from the stack and assign them as the left and right children of the new node
+            	t1=st.pop();
+            	t2=st.pop();
+            	
+            	t.rval=t1;
+            	t.lval=t2;
+            	// Push the new node onto the stack
+            	st.push(t);
+            	
+            	
+            	
+            }
+        }
+     //  only node left on the stack is the root of the tree
+        t=st.peek();
+        st.pop();
+        return t;
+		
+	}
+	public static void main(String args[]) {
+//      
+		    //declare expression
+		    String postfix = "23+41-*";
+		    //convert string to char
+		    char[] ar1 = postfix.toCharArray();
+		    //construct tree
+		    TreeNd root = constructTree(ar1);
+		    //print tree
+		    System.out.println("tree expressed using inorder traversal is");
+		    
+		    inorder(root);
+		    System.out.println("root is: "+ root.value);
+		    
+        
+
+    }
+
+}
+
